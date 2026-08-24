@@ -1,0 +1,6 @@
+{
+  "name": "Refilwe Thapelo Trading & Projects",
+  "description": "Official website for Refilwe Thapelo Trading & Projects - A diversified South African business group operating in agriculture, logistics, refrigeration, food services, trading, and community development.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
