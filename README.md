@@ -1,35 +1,46 @@
 # Refilwe Thapelo Trading & Projects
 
-Responsive React, TypeScript and Vite website prepared for Netlify hosting.
+The official website for Refilwe Thapelo Trading & Projects, a diversified South African enterprise operating across agriculture, food services, livestock, transport, storage, cleaning and related business services.
 
-## Local development
+## Live Website
+
+Visit the official website:
+
+[https://refilwethapelo.com](https://refilwethapelo.com)
+
+## About the Website
+
+This responsive website presents the company’s businesses, services and completed projects through a modern and accessible digital experience.
+
+### Featured Services
+
+- Agricultural consulting
+- Vegetable production
+- Livestock and meat supply
+- Piggery operations
+- Egg supply
+- Catering and food services
+- Spit-braai services
+- Transport and storage
+- Cleaning services
+
+## Technology
+
+The website was developed using:
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Lucide React
+- Netlify continuous deployment
+
+## Local Development
+
+Clone the repository and install the required dependencies:
 
 ```bash
+git clone https://github.com/Musamahlangu1977/refilwe-thapelo-trading-website.git
+cd refilwe-thapelo-trading-website
 npm install
 npm run dev
-```
-
-## Production build
-
-```bash
-npm run build
-```
-
-The production-ready website is generated in `dist`.
-
-## Deploy on Netlify
-
-### Drag-and-drop deployment
-
-1. Run `npm install` and `npm run build` locally.
-2. Upload the generated `dist` folder to Netlify Drop.
-
-### Git deployment
-
-1. Upload this project to GitHub.
-2. In Netlify, select **Add new site → Import an existing project**.
-3. Select the repository.
-4. Netlify automatically uses `npm run build` and publishes `dist`.
-5. Select **Deploy site**.
-
-The included redirect rule ensures refreshed pages load correctly.
