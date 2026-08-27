@@ -6,6 +6,15 @@
     <title>My Google AI Studio App</title>
   </head>
   <body>
+    <!-- Static form blueprint allows Netlify to detect the React enquiry form at build time. -->
+    <form name="service-inquiry" method="POST" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="service-inquiry" />
+      <select name="business-division"><option value="General Inquiry">General Inquiry</option></select>
+      <input type="text" name="name" />
+      <input type="tel" name="phone" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
