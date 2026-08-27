@@ -64,12 +64,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ openInquiryModal
               {/* Contact Channels */}
               <div className="space-y-3 pt-2 text-sm">
                 <a
-                  href={`tel:${companyContact.phone.replace(/\s+/g, '')}`}
+                  href="https://wa.me/27720778876"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center space-x-3 p-3 rounded-xl bg-[#164e3d]/60 hover:bg-[#164e3d] transition border border-emerald-700/40"
                 >
                   <Phone className="w-5 h-5 text-amber-400 shrink-0" />
                   <div>
-                    <div className="text-[10px] text-emerald-300 font-bold uppercase">Direct Telephone / WhatsApp</div>
+                    <div className="text-[10px] text-emerald-300 font-bold uppercase">Open WhatsApp</div>
                     <div className="text-white font-extrabold text-base">{companyContact.phone}</div>
                   </div>
                 </a>
