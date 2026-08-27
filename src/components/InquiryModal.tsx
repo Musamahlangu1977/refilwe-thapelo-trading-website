@@ -19,6 +19,8 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     if (preselectedEntity) {
@@ -28,13 +30,44 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    const formData = new URLSearchParams();
+    formData.append('form-name', 'service-inquiry');
+    formData.append('business-division', selectedEntity);
+    formData.append('name', name);
+    formData.append('phone', phone);
+    formData.append('email', email);
+    formData.append('message', message);
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString(),
+      });
+
+      if (!response.ok) {
+        throw new Error('The enquiry could not be submitted.');
+      }
+
+      setSubmitted(true);
+    } catch {
+      setSubmitError(
+        'We could not send your enquiry right now. Please try again or contact us directly by phone, WhatsApp or email.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetAndClose = () => {
     setSubmitted(false);
+    setIsSubmitting(false);
+    setSubmitError('');
     setName('');
     setPhone('');
     setEmail('');
@@ -69,7 +102,7 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form name="service-inquiry" method="POST" data-netlify="true" onSubmit={handleSubmit} className="space-y-4">
               
               {/* Select Service or Division */}
               <div>
@@ -77,6 +110,7 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
                   Business Division / Project
                 </label>
                 <select
+                  name="business-division"
                   value={selectedEntity}
                   onChange={(e) => setSelectedEntity(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-stone-50 text-stone-900 text-sm font-medium focus:ring-2 focus:ring-emerald-700 focus:outline-none"
@@ -106,6 +140,8 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
                 </label>
                 <input
                   type="text"
+                  name="name"
+                  autoComplete="name"
                   required
                   placeholder="e.g. Lerato Mokoena"
                   value={name}
@@ -122,6 +158,8 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
                   </label>
                   <input
                     type="tel"
+                    name="phone"
+                    autoComplete="tel"
                     required
                     placeholder="072 000 0000"
                     value={phone}
@@ -136,6 +174,8 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
                   </label>
                   <input
                     type="email"
+                    name="email"
+                    autoComplete="email"
                     placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -150,6 +190,7 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
                   Inquiry / Quote Requirement
                 </label>
                 <textarea
+                  name="message"
                   rows={3}
                   placeholder="Tell us how we can assist you (e.g. Transport quote, Fridge rental contract, Meat Ranch order)..."
                   value={message}
@@ -158,13 +199,20 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
                 />
               </div>
 
+              {submitError && (
+                <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-semibold text-red-800">
+                  {submitError}
+                </div>
+              )}
+
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full py-3 px-6 rounded-xl bg-[#0f382c] hover:bg-emerald-900 text-white font-extrabold text-sm shadow-lg transition-all flex items-center justify-center space-x-2"
+                disabled={isSubmitting}
+                className="w-full py-3 px-6 rounded-xl bg-[#0f382c] hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-60 text-white font-extrabold text-sm shadow-lg transition-all flex items-center justify-center space-x-2"
               >
                 <Send className="w-4 h-4 text-amber-400" />
-                <span>Submit Direct Inquiry</span>
+                <span>{isSubmitting ? 'Sending Enquiry...' : 'Submit Direct Inquiry'}</span>
               </button>
 
               <div className="text-[11px] text-stone-500 text-center flex items-center justify-center space-x-1 pt-1">
