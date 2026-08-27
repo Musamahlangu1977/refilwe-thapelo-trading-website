@@ -19,8 +19,6 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     if (preselectedEntity) {
@@ -30,44 +28,31 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const createInquiryText = () =>
+    [
+      'Hello Refilwe Thapelo Trading & Projects,',
+      '',
+      `Business division / project: ${selectedEntity}`,
+      `Name / company: ${name}`,
+      `Phone: ${phone}`,
+      `Email: ${email || 'Not provided'}`,
+      `Enquiry: ${message || 'I would like more information.'}`,
+    ].join('\n');
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitError('');
+    window.open(`https://wa.me/27720778876?text=${encodeURIComponent(createInquiryText())}`, '_blank', 'noopener,noreferrer');
+    setSubmitted(true);
+  };
 
-    const formData = new URLSearchParams();
-    formData.append('form-name', 'service-inquiry');
-    formData.append('business-division', selectedEntity);
-    formData.append('name', name);
-    formData.append('phone', phone);
-    formData.append('email', email);
-    formData.append('message', message);
-
-    try {
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData.toString(),
-      });
-
-      if (!response.ok) {
-        throw new Error('The enquiry could not be submitted.');
-      }
-
-      setSubmitted(true);
-    } catch {
-      setSubmitError(
-        'We could not send your enquiry right now. Please try again or contact us directly by phone, WhatsApp or email.'
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleEmail = () => {
+    const subject = `Website enquiry: ${selectedEntity}`;
+    window.location.href = `mailto:${companyContact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(createInquiryText())}`;
+    setSubmitted(true);
   };
 
   const resetAndClose = () => {
     setSubmitted(false);
-    setIsSubmitting(false);
-    setSubmitError('');
     setName('');
     setPhone('');
     setEmail('');
@@ -199,20 +184,22 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
                 />
               </div>
 
-              {submitError && (
-                <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-semibold text-red-800">
-                  {submitError}
-                </div>
-              )}
-
-              {/* Submit Button */}
+              {/* Direct enquiry actions */}
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full py-3 px-6 rounded-xl bg-[#0f382c] hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-60 text-white font-extrabold text-sm shadow-lg transition-all flex items-center justify-center space-x-2"
+                className="w-full py-3 px-6 rounded-xl bg-[#0f382c] hover:bg-emerald-900 text-white font-extrabold text-sm shadow-lg transition-all flex items-center justify-center space-x-2"
               >
                 <Send className="w-4 h-4 text-amber-400" />
-                <span>{isSubmitting ? 'Sending Enquiry...' : 'Submit Direct Inquiry'}</span>
+                <span>Send Enquiry via WhatsApp</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleEmail}
+                className="w-full py-3 px-6 rounded-xl border-2 border-emerald-900 bg-white hover:bg-emerald-50 text-emerald-950 font-extrabold text-sm transition-all flex items-center justify-center space-x-2"
+              >
+                <Mail className="w-4 h-4 text-emerald-800" />
+                <span>Send Enquiry via Email</span>
               </button>
 
               <div className="text-[11px] text-stone-500 text-center flex items-center justify-center space-x-1 pt-1">
@@ -230,11 +217,11 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
             </div>
 
             <h3 className="text-2xl font-extrabold text-stone-900">
-              Inquiry Received!
+              Enquiry Prepared!
             </h3>
 
             <p className="text-sm text-stone-600 max-w-sm mx-auto leading-relaxed">
-              Thank you, <span className="font-bold text-stone-900">{name}</span>. Your inquiry regarding <span className="font-bold text-emerald-800">{selectedEntity}</span> has been routed to our executive team.
+              Thank you, <span className="font-bold text-stone-900">{name}</span>. Your enquiry regarding <span className="font-bold text-emerald-800">{selectedEntity}</span> has been opened in your selected WhatsApp or email app. Please press send there to complete it.
             </p>
 
             <div className="bg-stone-50 p-4 rounded-2xl border border-stone-200 text-xs text-stone-700 space-y-1.5 text-left">
