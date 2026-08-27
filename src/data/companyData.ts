@@ -69,7 +69,7 @@ export {
 export const companyContact: ContactInfo = {
   directorGeneral: 'Mr Refilwe Xhali',
   title: 'Director General',
-  phone: '072 077 8876',
+  phone: '+27 72 077 8876',
   email: 'refilwethapelo1@gmail.com',
   regNumber: '2022/337/316/07',
   pretoriaOffice: '25 Kgalagngwe Street, Saulsville, Pretoria, 0125',
